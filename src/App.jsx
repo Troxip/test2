@@ -20,6 +20,11 @@ function App() {
   );
   const [realTimeBalance, setRealTimeBalance] = useState(0);
   const [timerStopped, setTimerStopped] = useState(false);
+  const mBlastEarned = greedy ? realTimeBalance - startBalance : 0;
+  const dollarPer100k = 0.7; // Dollar amount earned per 100k mBlast
+  const totalEarned = realTimeBalance
+    ? (mBlastEarned / 100000) * dollarPer100k
+    : 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,59 +121,6 @@ function App() {
     return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
   };
 
-  const earnedPerHour = () => {
-    if (elapsedTime === 0) return 0;
-    const earned = realTimeBalance - startBalance;
-    const hours = elapsedTime / 3600;
-    return earned / hours;
-  };
-
-  const calculateEarnings = (mblastPerHour) => {
-    if (mblastPerHour < 600000) {
-      return 2;
-    } else if (mblastPerHour < 650000) {
-      return 2.25;
-    } else if (mblastPerHour < 700000) {
-      return 3;
-    } else if (mblastPerHour < 750000) {
-      return 3.5;
-    } else if (mblastPerHour < 800000) {
-      return 3.75;
-    } else if (mblastPerHour < 860000) {
-      return 3.9;
-    } else if (mblastPerHour < 900000) {
-      return 4;
-    } else if (mblastPerHour < 950000) {
-      return 4.5;
-    } else if (mblastPerHour < 1000000) {
-      return 5;
-    } else if (mblastPerHour < 1100000) {
-      return 5.5;
-    } else if (mblastPerHour < 1200000) {
-      return 6;
-    } else if (mblastPerHour < 1300000) {
-      return 6.5;
-    } else if (mblastPerHour < 1400000) {
-      return 7;
-    } else if (mblastPerHour < 1500000) {
-      return 7.25;
-    } else {
-      return 7.5;
-    }
-  };
-
-  const calculateTotalEarned = () => {
-    const hourlyEarnings = calculateEarnings(earnedPerHour());
-    const totalEarned = hourlyEarnings * (elapsedTime / 3600);
-    return totalEarned.toFixed(2);
-  };
-
-  const earningText = () => {
-    const mblastPerHour = earnedPerHour();
-    const hourlyEarnings = calculateEarnings(mblastPerHour);
-    return `Вы заработали $${hourlyEarnings.toFixed(2)} в час`;
-  };
-
   useEffect(() => {
     const reloadPage = () => {
       window.location.reload();
@@ -230,7 +182,9 @@ function App() {
               mBlast Earned / Заработано mBlast:{" "}
               <span className={timerStopped ? "earned" : ""}>
                 {numberWithCommas(
-                  greedy ? numberWithCommas(realTimeBalance - startBalance) : 0
+                  realTimeBalance
+                    ? numberWithCommas(realTimeBalance - startBalance)
+                    : 0
                 )}
               </span>
             </p>
@@ -257,37 +211,31 @@ function App() {
             </p>
           </>
         )}
-        {timerStopped && (
-          <>
-            <p>______________________________________</p>
-            <p>
-              Earned per hour / Заработано в час:{" "}
-              <span className={timerStopped ? "earned" : ""}>
-                {numberWithCommas(Math.round(earnedPerHour()))} mBlast/hour
-              </span>
-            </p>
-            <p>
-              Start Time / Время начала:{" "}
-              <span className={timerStopped ? "earned" : ""}>
-                {new Date(startTime).toLocaleString("ru-RU", {
-                  timeZone: "Europe/Moscow",
-                })}
-              </span>
-            </p>
+        <>
+          <p>______________________________________</p>
+          <p>
+            Start Time / Время начала:{" "}
+            <span className={timerStopped ? "earned" : ""}>
+              {new Date(startTime).toLocaleString("ru-RU", {
+                timeZone: "Europe/Moscow",
+              })}
+            </span>
+          </p>
+          {timerStopped && (
             <p>
               End Time / Время окончания:{" "}
               <span className={timerStopped ? "earned" : ""}>{endTime}</span>
             </p>
-            <p>______________________________________</p>
-            <p>{earningText()}</p>
-            <p>
-              Total Earned / Всего заработано:{" "}
-              <span className={timerStopped ? "earned" : ""}>
-                ${calculateTotalEarned()}
-              </span>
-            </p>
-          </>
-        )}
+          )}
+          <p>______________________________________</p>
+          <p>{}</p>
+          <p>
+            Total Earned / Всего заработано:{" "}
+            <span className={timerStopped ? "earned" : ""}>
+              ${totalEarned.toFixed(2)}
+            </span>
+          </p>
+        </>
       </div>
     </>
   );
