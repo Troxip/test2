@@ -21,7 +21,7 @@ function App() {
   const [realTimeBalance, setRealTimeBalance] = useState(0);
   const [timerStopped, setTimerStopped] = useState(false);
   const mBlastEarned = greedy ? realTimeBalance - startBalance : 0;
-  const dollarPer100k = 0.7; // Dollar amount earned per 100k mBlast
+  const dollarPer100k = 0.75; // Dollar amount earned per 100k mBlast
   const totalEarned = realTimeBalance
     ? (mBlastEarned / 100000) * dollarPer100k
     : 0;
@@ -228,7 +228,7 @@ function App() {
             </p>
           )}
           <p>______________________________________</p>
-          <p>{}</p>
+          <p className="rate">Current Rate: ${dollarPer100k}/100k</p>
           <p>
             Total Earned / Всего заработано:{" "}
             <span className={timerStopped ? "earned" : ""}>
