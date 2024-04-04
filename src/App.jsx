@@ -147,7 +147,11 @@ function App() {
       </div>
 
       {timerStarted ? (
-        <button onClick={handleTimerStop} className="stopButton">
+        <button
+          onClick={handleTimerStop}
+          className={!realTimeBalance ? "stopButton disabled" : "stopButton"}
+          disabled={!realTimeBalance}
+        >
           Stop / Стоп
         </button>
       ) : (
