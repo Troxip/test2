@@ -14,7 +14,7 @@ export default function FetchMblast({ setGreedy }) {
   useEffect(() => {
     async function fetchData() {
       const limit = 25;
-      const offsets = Array.from({ length: 81 }, (_, index) => index * limit); // Generate offsets from 0 to 2000
+      const offsets = Array.from({ length: 10 }, (_, index) => index * limit); // Generate offsets from 0 to 2000
 
       try {
         const responses = await Promise.all(
@@ -63,7 +63,7 @@ export default function FetchMblast({ setGreedy }) {
 
   return (
     <div className="total">
-      <input
+      {/* <input
         type="text"
         value={usernameInput}
         onChange={handleInputChange}
@@ -80,7 +80,7 @@ export default function FetchMblast({ setGreedy }) {
           gr33dyBalance &&
           ((gr33dyBalance / totalBalance) * 100).toFixed(2)}
         % owned by {usernameInput && `${usernameInput}`}
-      </p>
+      </p> */}
     </div>
   );
 }

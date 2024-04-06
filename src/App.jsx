@@ -21,7 +21,7 @@ function App() {
   const [realTimeBalance, setRealTimeBalance] = useState(0);
   const [timerStopped, setTimerStopped] = useState(false);
   const mBlastEarned = greedy ? realTimeBalance - startBalance : 0;
-  const dollarPer100k = 0.75; // Dollar amount earned per 100k mBlast
+  const dollarPer100k = 0.7; // Dollar amount earned per 100k mBlast
   const totalEarned = realTimeBalance
     ? (mBlastEarned / 100000) * dollarPer100k
     : 0;
@@ -31,6 +31,17 @@ function App() {
       if (greedy) {
         if (timerStarted) {
           setRealTimeBalance(greedy[0]?.mblast_balance || 0);
+        } else {
+          // Fetch real-time balance data when the component mounts and timer is not started
+          try {
+            const response = await fetch(
+              "https://example.com/your-real-time-balance-endpoint"
+            );
+            const data = await response.json();
+            setRealTimeBalance(data.mblast_balance || 0);
+          } catch (error) {
+            console.error("Error fetching real-time balance:", error);
+          }
         }
       }
     };
@@ -144,6 +155,7 @@ function App() {
             alt="Vite logo"
           />
         </a>
+        <h1 className="shipnumber">Второй Корабль</h1>
       </div>
 
       {timerStarted ? (
@@ -155,7 +167,11 @@ function App() {
           Stop / Стоп
         </button>
       ) : (
-        <button onClick={handleTimerStart} className="button">
+        <button
+          onClick={handleTimerStart}
+          disabled={!greedy}
+          className={!greedy ? "button disabled" : "button"}
+        >
           Start Timer / Начать таймер
         </button>
       )}

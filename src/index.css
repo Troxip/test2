@@ -110,3 +110,8 @@ h1 {
 .rate {
   font-size: 12px;
 }
+
+.shipnumber {
+  margin-top: -20px;
+  color: #ffffff;
+}
